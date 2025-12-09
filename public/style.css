@@ -3,25 +3,25 @@
     --bg-secondary: #151b2d;
     --bg-tertiary: #1e2638;
     --bg-card: #1a2035;
-    
+
     --text-primary: #e8eaed;
     --text-secondary: #9aa0b3;
     --text-muted: #6b7280;
-    
+
     --accent-blue: #3b82f6;
     --accent-purple: #8b5cf6;
     --accent-green: #10b981;
     --accent-yellow: #f59e0b;
     --accent-red: #ef4444;
-    
+
     --border-color: #2d3548;
     --hover-bg: #252d42;
-    
+
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
     --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.6);
-    
+
     --radius-sm: 6px;
     --radius-md: 10px;
     --radius-lg: 14px;
@@ -80,8 +80,17 @@ body {
 }
 
 @keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 0.5; }
-    50% { transform: scale(1.1); opacity: 0.8; }
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
 }
 
 .login-box {
@@ -196,7 +205,9 @@ body {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* ===== DASHBOARD ===== */
@@ -316,8 +327,15 @@ body {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .attendance-card:hover {
@@ -520,12 +538,12 @@ body {
         align-items: flex-start;
         gap: 15px;
     }
-    
+
     .btn-logout {
         width: 100%;
         text-align: center;
     }
-    
+
     .attendance-grid {
         grid-template-columns: 1fr;
     }
