@@ -381,7 +381,7 @@ body {
     font-size: 1.5rem;
     min-width: 80px;
     text-align: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .badge-high {
@@ -560,6 +560,7 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
 .section-header {
     margin-bottom: 20px;
 }
@@ -569,7 +570,7 @@ body {
     font-size: 0.9rem;
     margin-top: -15px;
     margin-bottom: 20px;
-    margin-left: 34px; /* Align with icon in title */
+    margin-left: 34px;
+    /* Align with icon in title */
     font-style: italic;
 }
-
