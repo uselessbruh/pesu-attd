@@ -355,8 +355,9 @@ body {
 .course-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     margin-bottom: 15px;
+    gap: 15px;
 }
 
 .course-code {
@@ -374,10 +375,13 @@ body {
 }
 
 .attendance-badge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-weight: 700;
-    font-size: 0.9rem;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 1.5rem;
+    min-width: 80px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .badge-high {
@@ -556,3 +560,16 @@ body {
         grid-template-columns: 1fr;
     }
 }
+.section-header {
+    margin-bottom: 20px;
+}
+
+.section-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-top: -15px;
+    margin-bottom: 20px;
+    margin-left: 34px; /* Align with icon in title */
+    font-style: italic;
+}
+
