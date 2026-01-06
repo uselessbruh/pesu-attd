@@ -614,6 +614,107 @@ body {
     .attendance-grid {
         grid-template-columns: 1fr;
     }
+
+    .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .stat-card {
+        padding: 16px;
+    }
+
+    .predictor-title {
+        font-size: 0.85rem;
+    }
+
+    .predictor-section {
+        padding: 10px;
+        margin-bottom: 12px;
+    }
+
+    .predictor-subtitle {
+        font-size: 0.8rem;
+        margin-bottom: 6px;
+    }
+
+    .predictor-input-group {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .predictor-input {
+        width: 100%;
+        font-size: 0.85rem;
+    }
+
+    .predictor-dual-input {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .predictor-input-small {
+        width: 100%;
+        min-width: unset;
+        font-size: 0.85rem;
+    }
+
+    .btn-predict {
+        width: 100%;
+        padding: 10px 16px;
+        font-size: 0.85rem;
+    }
+
+    .predictor-result {
+        font-size: 0.85rem;
+        margin-top: 8px;
+    }
+
+    .section-subtitle {
+        margin-left: 0;
+        font-size: 0.85rem;
+    }
+
+    .course-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .attendance-badge {
+        font-size: 1rem;
+    }
+
+    .course-stats {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-container {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-card {
+        padding: 14px;
+    }
+
+    .stat-icon {
+        font-size: 1.8rem;
+    }
+
+    .dashboard {
+        padding: 15px;
+    }
+
+    .predictor-section {
+        padding: 8px;
+    }
+
+    .login-box {
+        padding: 25px;
+    }
 }
 
 .section-header {
