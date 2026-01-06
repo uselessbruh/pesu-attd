@@ -106,6 +106,14 @@ function displayDashboard(data) {
 
     // Display attendance table
     window.currentAttendanceData = attendance;
+    
+    // Restore saved sort order
+    const savedSortOrder = localStorage.getItem('sortOrder') || 'normal';
+    const sortSelect = document.getElementById('sortOrder');
+    if (sortSelect) {
+        sortSelect.value = savedSortOrder;
+    }
+    
     displayAttendance(attendance);
 }
 
@@ -119,7 +127,8 @@ function displayAttendance(attendance) {
     }
 
     // Get current sort order
-    const sortOrder = document.getElementById('sortOrder')?.value || 'normal';
+    const sortSelect = document.getElementById('sortOrder');
+    const sortOrder = sortSelect?.value || localStorage.getItem('sortOrder') || 'normal';
     let sortedAttendance = [...attendance];
 
     if (sortOrder === 'ascending') {
@@ -308,7 +317,15 @@ window.calculateNewAttendance = function (index, currentAttended, currentTotal) 
 window.addEventListener('load', () => {
     const sortSelect = document.getElementById('sortOrder');
     if (sortSelect) {
+        // Load saved sort order
+        const savedSortOrder = localStorage.getItem('sortOrder');
+        if (savedSortOrder) {
+            sortSelect.value = savedSortOrder;
+        }
+        
+        // Save sort order on change
         sortSelect.addEventListener('change', () => {
+            localStorage.setItem('sortOrder', sortSelect.value);
             if (window.currentAttendanceData) {
                 displayAttendance(window.currentAttendanceData);
             }
