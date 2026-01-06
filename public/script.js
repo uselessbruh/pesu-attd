@@ -106,14 +106,14 @@ function displayDashboard(data) {
 
     // Display attendance table
     window.currentAttendanceData = attendance;
-    
+
     // Restore saved sort order
     const savedSortOrder = localStorage.getItem('sortOrder') || 'normal';
     const sortSelect = document.getElementById('sortOrder');
     if (sortSelect) {
         sortSelect.value = savedSortOrder;
     }
-    
+
     displayAttendance(attendance);
 }
 
@@ -322,7 +322,7 @@ window.addEventListener('load', () => {
         if (savedSortOrder) {
             sortSelect.value = savedSortOrder;
         }
-        
+
         // Save sort order on change
         sortSelect.addEventListener('change', () => {
             localStorage.setItem('sortOrder', sortSelect.value);
