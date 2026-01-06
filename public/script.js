@@ -109,7 +109,7 @@ function displayAttendance(attendance) {
     // Get current sort order
     const sortOrder = document.getElementById('sortOrder')?.value || 'normal';
     let sortedAttendance = [...attendance];
-    
+
     if (sortOrder === 'ascending') {
         sortedAttendance.sort((a, b) => a.percentage - b.percentage);
     } else if (sortOrder === 'descending') {
@@ -225,7 +225,7 @@ window.calculateNewAttendance = function (index, currentAttended, currentTotal) 
     const presentInput = document.getElementById(`add-present-${index}`);
     const absentInput = document.getElementById(`add-absent-${index}`);
     const resultDiv = document.getElementById(`calc-result-${index}`);
-    
+
     const addPresent = parseInt(presentInput.value) || 0;
     const addAbsent = parseInt(absentInput.value) || 0;
 
@@ -240,13 +240,13 @@ window.calculateNewAttendance = function (index, currentAttended, currentTotal) 
     const newPercentage = ((newAttended / newTotal) * 100).toFixed(2);
     const currentPercentage = ((currentAttended / currentTotal) * 100).toFixed(2);
     const change = (newPercentage - currentPercentage).toFixed(2);
-    
+
     const target = 75;
     let additionalStats = '';
 
     if (newPercentage < target) {
         // Calculate sessions needed to reach 75%
-        const needed = Math.ceil((target/100 * newTotal - newAttended) / (1 - target/100));
+        const needed = Math.ceil((target / 100 * newTotal - newAttended) / (1 - target / 100));
         additionalStats = `
             <div class="stat-warning">
                 <div class="stat-icon">⚠️</div>
@@ -255,7 +255,7 @@ window.calculateNewAttendance = function (index, currentAttended, currentTotal) 
         `;
     } else {
         // Calculate sessions that can be skipped
-        const canSkip = Math.floor(newAttended / (target/100) - newTotal);
+        const canSkip = Math.floor(newAttended / (target / 100) - newTotal);
         if (canSkip > 0) {
             additionalStats = `
                 <div class="stat-success">
