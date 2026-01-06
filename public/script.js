@@ -306,7 +306,7 @@ window.calculateCombinedPrediction = function (index, attended, total) {
     const attendInput = document.getElementById(`both-attend-${index}`);
     const skipInput = document.getElementById(`both-skip-${index}`);
     const resultDiv = document.getElementById(`combined-result-${index}`);
-    
+
     const x = parseInt(attendInput.value) || 0;
     const y = parseInt(skipInput.value) || 0;
 
