@@ -93,6 +93,7 @@ function displayDashboard(data) {
     document.getElementById('lowCourses').textContent = lowCourses;
 
     // Display attendance table
+    window.currentAttendanceData = attendance;
     displayAttendance(attendance);
 }
 
@@ -105,8 +106,16 @@ function displayAttendance(attendance) {
         return;
     }
 
-    // Sort courses by attendance percentage in ascending order (lowest to highest)
-    const sortedAttendance = [...attendance].sort((a, b) => a.percentage - b.percentage);
+    // Get current sort order
+    const sortOrder = document.getElementById('sortOrder')?.value || 'normal';
+    let sortedAttendance = [...attendance];
+    
+    if (sortOrder === 'ascending') {
+        sortedAttendance.sort((a, b) => a.percentage - b.percentage);
+    } else if (sortOrder === 'descending') {
+        sortedAttendance.sort((a, b) => b.percentage - a.percentage);
+    }
+    // 'normal' keeps original order
 
     const html = `
         <div class="attendance-grid">
@@ -193,35 +202,14 @@ function displayAttendance(attendance) {
                         ${statusHtml}
 
                         <div class="predictor-box">
-                            <div class="predictor-title">📊 Session Attendance Predictor</div>
+                            <div class="predictor-title">📊 Attendance Calculator</div>
                             
-                            <div class="predictor-section">
-                                <div class="predictor-subtitle">If I attend sessions:</div>
-                                <div class="predictor-input-group">
-                                    <input type="number" min="1" placeholder="Number of sessions" class="predictor-input" id="attend-input-${index}">
-                                    <button class="btn-predict" onclick="calculateAttendPrediction(${index}, ${attended}, ${total})">Calculate</button>
-                                </div>
-                                <div id="attend-result-${index}" class="predictor-result"></div>
+                            <div class="predictor-input-row">
+                                <input type="number" min="0" value="0" placeholder="Add Presents" class="predictor-input-half" id="add-present-${index}">
+                                <input type="number" min="0" value="0" placeholder="Add Absents" class="predictor-input-half" id="add-absent-${index}">
                             </div>
-
-                            <div class="predictor-section">
-                                <div class="predictor-subtitle">If I skip sessions:</div>
-                                <div class="predictor-input-group">
-                                    <input type="number" min="1" placeholder="Number of sessions" class="predictor-input" id="skip-input-${index}">
-                                    <button class="btn-predict btn-predict-warning" onclick="calculateSkipPrediction(${index}, ${attended}, ${total})">Calculate</button>
-                                </div>
-                                <div id="skip-result-${index}" class="predictor-result"></div>
-                            </div>
-
-                            <div class="predictor-section">
-                                <div class="predictor-subtitle">If I attend & skip sessions:</div>
-                                <div class="predictor-dual-input">
-                                    <input type="number" min="0" placeholder="Attend" class="predictor-input-small" id="both-attend-${index}">
-                                    <input type="number" min="0" placeholder="Skip" class="predictor-input-small" id="both-skip-${index}">
-                                    <button class="btn-predict btn-predict-combined" onclick="calculateCombinedPrediction(${index}, ${attended}, ${total})">Calculate</button>
-                                </div>
-                                <div id="combined-result-${index}" class="predictor-result"></div>
-                            </div>
+                            <button class="btn-calculate" onclick="calculateNewAttendance(${index}, ${attended}, ${total})">Calculate</button>
+                            <div id="calc-result-${index}" class="calc-result"></div>
                         </div>
                     </div>
                 `;
@@ -232,124 +220,89 @@ function displayAttendance(attendance) {
     container.innerHTML = html;
 }
 
-// Global functions for predictions
+// Calculate new attendance with added presents and absents
+window.calculateNewAttendance = function (index, currentAttended, currentTotal) {
+    const presentInput = document.getElementById(`add-present-${index}`);
+    const absentInput = document.getElementById(`add-absent-${index}`);
+    const resultDiv = document.getElementById(`calc-result-${index}`);
+    
+    const addPresent = parseInt(presentInput.value) || 0;
+    const addAbsent = parseInt(absentInput.value) || 0;
 
-// Calculate prediction for attending sessions
-window.calculateAttendPrediction = function (index, attended, total) {
-    const input = document.getElementById(`attend-input-${index}`);
-    const resultDiv = document.getElementById(`attend-result-${index}`);
-    const x = parseInt(input.value);
-
-    if (!x || x < 0) {
-        resultDiv.innerHTML = '<span style="color: var(--accent-red)">⚠️ Please enter a valid number</span>';
+    if (addPresent === 0 && addAbsent === 0) {
+        resultDiv.innerHTML = '<div class="error-msg">⚠️ Please enter at least one value</div>';
         return;
     }
 
-    // Formula: New % = ( (A + x) / (T + x) ) * 100
-    const newAttended = attended + x;
-    const newTotal = total + x;
+    // Calculate new attendance
+    const newAttended = currentAttended + addPresent;
+    const newTotal = currentTotal + addPresent + addAbsent;
     const newPercentage = ((newAttended / newTotal) * 100).toFixed(2);
-    const change = (newPercentage - (attended / total * 100)).toFixed(2);
-    const changeSymbol = change >= 0 ? '📈' : '📉';
-    const changeColor = change >= 0 ? 'var(--accent-green)' : 'var(--accent-red)';
-
-    resultDiv.innerHTML = `
-        <div>If you attend <strong>${x}</strong> session${x > 1 ? 's' : ''}:</div>
-        <div style="margin-top: 5px; font-size: 0.95em;">
-            <strong style="color: var(--accent-blue)">${newPercentage}%</strong> 
-            <span style="color: ${changeColor}">${changeSymbol} ${change > 0 ? '+' : ''}${change}%</span>
-        </div>
-        <div style="margin-top: 3px; font-size: 0.85em; opacity: 0.8;">
-            (${newAttended}/${newTotal} sessions)
-        </div>
-    `;
-};
-
-// Calculate prediction for skipping sessions
-window.calculateSkipPrediction = function (index, attended, total) {
-    const input = document.getElementById(`skip-input-${index}`);
-    const resultDiv = document.getElementById(`skip-result-${index}`);
-    const y = parseInt(input.value);
-
-    if (!y || y < 0) {
-        resultDiv.innerHTML = '<span style="color: var(--accent-red)">⚠️ Please enter a valid number</span>';
-        return;
-    }
-
-    // Formula: New % = ( A / (T + y) ) * 100
-    const newTotal = total + y;
-    const newPercentage = ((attended / newTotal) * 100).toFixed(2);
-    const change = (newPercentage - (attended / total * 100)).toFixed(2);
-    const changeSymbol = change >= 0 ? '📈' : '📉';
-    const changeColor = 'var(--accent-red)';
-
-    let warningText = '';
-    if (newPercentage < 75) {
-        warningText = '<div style="color: var(--accent-red); margin-top: 5px; font-size: 0.85em;">⚠️ Below 75% threshold!</div>';
-    }
-
-    resultDiv.innerHTML = `
-        <div>If you skip <strong>${y}</strong> session${y > 1 ? 's' : ''}:</div>
-        <div style="margin-top: 5px; font-size: 0.95em;">
-            <strong style="color: var(--accent-blue)">${newPercentage}%</strong> 
-            <span style="color: ${changeColor}">${changeSymbol} ${change}%</span>
-        </div>
-        <div style="margin-top: 3px; font-size: 0.85em; opacity: 0.8;">
-            (${attended}/${newTotal} sessions)
-        </div>
-        ${warningText}
-    `;
-};
-
-// Calculate combined prediction (attend X and skip Y)
-window.calculateCombinedPrediction = function (index, attended, total) {
-    const attendInput = document.getElementById(`both-attend-${index}`);
-    const skipInput = document.getElementById(`both-skip-${index}`);
-    const resultDiv = document.getElementById(`combined-result-${index}`);
-
-    const x = parseInt(attendInput.value) || 0;
-    const y = parseInt(skipInput.value) || 0;
-
-    if (x === 0 && y === 0) {
-        resultDiv.innerHTML = '<span style="color: var(--accent-red)">⚠️ Please enter at least one value</span>';
-        return;
-    }
-
-    // Formula: New % = ( (A + x) / (T + x + y) ) * 100
-    const newAttended = attended + x;
-    const newTotal = total + x + y;
-    const newPercentage = ((newAttended / newTotal) * 100).toFixed(2);
-    const currentPercentage = (attended / total * 100).toFixed(2);
+    const currentPercentage = ((currentAttended / currentTotal) * 100).toFixed(2);
     const change = (newPercentage - currentPercentage).toFixed(2);
-    const changeSymbol = change >= 0 ? '📈' : '📉';
-    const changeColor = change >= 0 ? 'var(--accent-green)' : 'var(--accent-red)';
+    
+    const target = 75;
+    let additionalStats = '';
 
-    let warningText = '';
-    if (newPercentage < 75) {
-        warningText = '<div style="color: var(--accent-red); margin-top: 5px; font-size: 0.85em;">⚠️ Below 75% threshold!</div>';
-    }
-
-    let actionText = '';
-    if (x > 0 && y > 0) {
-        actionText = `attend <strong>${x}</strong> and skip <strong>${y}</strong> session${(x + y) > 1 ? 's' : ''}`;
-    } else if (x > 0) {
-        actionText = `attend <strong>${x}</strong> session${x > 1 ? 's' : ''}`;
+    if (newPercentage < target) {
+        // Calculate sessions needed to reach 75%
+        const needed = Math.ceil((target/100 * newTotal - newAttended) / (1 - target/100));
+        additionalStats = `
+            <div class="stat-warning">
+                <div class="stat-icon">⚠️</div>
+                <div>Need to attend <strong>${needed}</strong> more consecutive session${needed > 1 ? 's' : ''} to reach 75%</div>
+            </div>
+        `;
     } else {
-        actionText = `skip <strong>${y}</strong> session${y > 1 ? 's' : ''}`;
+        // Calculate sessions that can be skipped
+        const canSkip = Math.floor(newAttended / (target/100) - newTotal);
+        if (canSkip > 0) {
+            additionalStats = `
+                <div class="stat-success">
+                    <div class="stat-icon">🎉</div>
+                    <div>Can skip <strong>${canSkip}</strong> session${canSkip > 1 ? 's' : ''} and stay above 75%</div>
+                </div>
+            `;
+        } else {
+            additionalStats = `
+                <div class="stat-neutral">
+                    <div class="stat-icon">✅</div>
+                    <div>On track, but cannot skip any sessions right now</div>
+                </div>
+            `;
+        }
     }
+
+    const changeColor = change >= 0 ? 'var(--accent-green)' : 'var(--accent-red)';
+    const changeSymbol = change >= 0 ? '📈' : '📉';
+    const badgeClass = newPercentage >= 75 ? 'badge-high' : newPercentage >= 65 ? 'badge-medium' : 'badge-low';
 
     resultDiv.innerHTML = `
-        <div>If you ${actionText}:</div>
-        <div style="margin-top: 5px; font-size: 0.95em;">
-            <strong style="color: var(--accent-blue)">${newPercentage}%</strong> 
-            <span style="color: ${changeColor}">${changeSymbol} ${change > 0 ? '+' : ''}${change}%</span>
+        <div class="result-summary">
+            <div class="result-header">
+                <div>New Attendance:</div>
+                <div class="attendance-badge ${badgeClass}">${newPercentage}%</div>
+            </div>
+            <div class="result-details">
+                <div><strong>${newAttended}</strong>/${newTotal} sessions</div>
+                <div style="color: ${changeColor}">${changeSymbol} ${change > 0 ? '+' : ''}${change}%</div>
+            </div>
         </div>
-        <div style="margin-top: 3px; font-size: 0.85em; opacity: 0.8;">
-            (${newAttended}/${newTotal} sessions)
-        </div>
-        ${warningText}
+        ${additionalStats}
     `;
 };
+
+// Sort order change handler
+window.addEventListener('load', () => {
+    const sortSelect = document.getElementById('sortOrder');
+    if (sortSelect) {
+        sortSelect.addEventListener('change', () => {
+            if (window.currentAttendanceData) {
+                displayAttendance(window.currentAttendanceData);
+            }
+        });
+    }
+});
 
 // Logout Handler
 logoutBtn.addEventListener('click', async () => {

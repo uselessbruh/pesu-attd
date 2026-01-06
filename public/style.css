@@ -479,116 +479,132 @@ body {
 
 .predictor-box {
     margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid var(--border-color);
+    padding: 15px;
+    background: rgba(59, 130, 246, 0.05);
+    border: 1px solid rgba(59, 130, 246, 0.1);
+    border-radius: var(--radius-md);
 }
 
 .predictor-title {
     font-size: 0.9rem;
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
-.predictor-section {
-    margin-bottom: 15px;
-    padding: 12px;
-    background: rgba(59, 130, 246, 0.05);
-    border-radius: var(--radius-sm);
-    border: 1px solid rgba(59, 130, 246, 0.1);
+.predictor-input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
 }
 
-.predictor-section:last-child {
-    margin-bottom: 0;
-}
-
-.predictor-subtitle {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    margin-bottom: 8px;
-    font-weight: 500;
-}
-
-.predictor-input-group {
-    display: flex;
-    gap: 8px;
-}
-
-.predictor-dual-input {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-
-.predictor-input {
-    flex: 1;
+.predictor-input-half {
     background: var(--bg-primary);
     border: 1px solid var(--border-color);
     color: var(--text-primary);
-    padding: 8px 12px;
+    padding: 10px 12px;
     border-radius: var(--radius-sm);
     font-size: 0.9rem;
     transition: all 0.2s;
+    width: 100%;
 }
 
-.predictor-input-small {
-    flex: 1;
-    background: var(--bg-primary);
-    border: 1px solid var(--border-color);
-    color: var(--text-primary);
-    padding: 8px 10px;
-    border-radius: var(--radius-sm);
-    font-size: 0.85rem;
-    transition: all 0.2s;
-    min-width: 80px;
-}
-
-.predictor-input:focus,
-.predictor-input-small:focus {
+.predictor-input-half:focus {
     outline: none;
     border-color: var(--accent-blue);
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
 }
 
-.btn-predict {
+.btn-calculate {
+    width: 100%;
     background: var(--accent-blue);
     color: white;
     border: none;
-    padding: 8px 16px;
+    padding: 12px;
     border-radius: var(--radius-sm);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
-    white-space: nowrap;
 }
 
-.btn-predict:hover {
+.btn-calculate:hover {
     background: #2563eb;
     transform: translateY(-1px);
 }
 
-.btn-predict-warning {
-    background: var(--accent-red);
+.btn-calculate:active {
+    transform: translateY(0);
 }
 
-.btn-predict-warning:hover {
-    background: #dc2626;
+.calc-result {
+    margin-top: 15px;
+    min-height: 20px;
 }
 
-.btn-predict-combined {
-    background: var(--accent-purple);
+.result-summary {
+    background: var(--bg-secondary);
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px;
 }
 
-.btn-predict-combined:hover {
-    background: #7c3aed;
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-weight: 600;
 }
 
-.predictor-result {
-    margin-top: 10px;
+.result-details {
+    display: flex;
+    justify-content: space-between;
     font-size: 0.9rem;
     color: var(--text-secondary);
-    min-height: 20px;
-    line-height: 1.5;
+}
+
+.stat-warning,
+.stat-success,
+.stat-neutral {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px;
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.stat-warning {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+}
+
+.stat-success {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    color: #6ee7b7;
+}
+
+.stat-neutral {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    color: #93c5fd;
+}
+
+.stat-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.error-msg {
+    color: var(--accent-red);
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 10px;
 }
 
 .loading {
@@ -600,100 +616,37 @@ body {
 
 /* Responsive */
 @media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    .dashboard {
+        padding: 15px;
+    }
+
     .header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 15px;
+        gap: 12px;
+    }
+
+    .user-info h2 {
+        font-size: 1.3rem;
+    }
+
+    .semester-info {
+        font-size: 0.85rem;
     }
 
     .btn-logout {
         width: 100%;
         text-align: center;
-    }
-
-    .attendance-grid {
-        grid-template-columns: 1fr;
+        padding: 10px;
     }
 
     .stats-container {
         grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-    }
-
-    .stat-card {
-        padding: 16px;
-    }
-
-    .predictor-title {
-        font-size: 0.85rem;
-    }
-
-    .predictor-section {
-        padding: 10px;
-        margin-bottom: 12px;
-    }
-
-    .predictor-subtitle {
-        font-size: 0.8rem;
-        margin-bottom: 6px;
-    }
-
-    .predictor-input-group {
-        flex-direction: column;
-        gap: 6px;
-    }
-
-    .predictor-input {
-        width: 100%;
-        font-size: 0.85rem;
-    }
-
-    .predictor-dual-input {
-        flex-direction: column;
-        gap: 6px;
-    }
-
-    .predictor-input-small {
-        width: 100%;
-        min-width: unset;
-        font-size: 0.85rem;
-    }
-
-    .btn-predict {
-        width: 100%;
-        padding: 10px 16px;
-        font-size: 0.85rem;
-    }
-
-    .predictor-result {
-        font-size: 0.85rem;
-        margin-top: 8px;
-    }
-
-    .section-subtitle {
-        margin-left: 0;
-        font-size: 0.85rem;
-    }
-
-    .course-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-
-    .attendance-badge {
-        font-size: 1rem;
-    }
-
-    .course-stats {
-        flex-direction: column;
-        gap: 8px;
-    }
-}
-
-@media (max-width: 480px) {
-    .stats-container {
-        grid-template-columns: 1fr;
+        gap: 10px;
     }
 
     .stat-card {
@@ -701,19 +654,270 @@ body {
     }
 
     .stat-icon {
-        font-size: 1.8rem;
+        font-size: 2rem;
     }
 
-    .dashboard {
+    .stat-info h3 {
+        font-size: 1.3rem;
+    }
+
+    .stat-info p {
+        font-size: 0.8rem;
+    }
+
+    .attendance-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .header-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .section-title {
+        font-size: 1.3rem;
+    }
+
+    .sort-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .sort-select {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .section-subtitle {
+        font-size: 0.8rem;
+    }
+
+    .attendance-card {
         padding: 15px;
     }
 
-    .predictor-section {
+    .course-code {
+        font-size: 0.85rem;
+    }
+
+    .course-name {
+        font-size: 0.95rem;
+    }
+
+    .attendance-badge {
+        font-size: 1.1rem;
+        padding: 6px 12px;
+    }
+
+    .course-stats {
+        gap: 10px;
+    }
+
+    .stat-item {
+        font-size: 0.85rem;
+    }
+
+    .status-box {
+        padding: 10px;
+        font-size: 0.85rem;
+    }
+
+    .predictor-box {
+        padding: 12px;
+    }
+
+    .predictor-title {
+        font-size: 0.85rem;
+    }
+
+    .predictor-input-row {
+        gap: 8px;
+    }
+
+    .predictor-input-half {
+        padding: 10px;
+        font-size: 0.85rem;
+    }
+
+    .btn-calculate {
+        padding: 11px;
+        font-size: 0.9rem;
+    }
+
+    .result-summary {
+        padding: 10px;
+    }
+
+    .result-header {
+        font-size: 0.9rem;
+    }
+
+    .result-details {
+        font-size: 0.85rem;
+    }
+
+    .stat-warning,
+    .stat-success,
+    .stat-neutral {
+        padding: 8px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+
+    .dashboard {
+        padding: 10px;
+    }
+
+    .header {
+        gap: 10px;
+    }
+
+    .user-info h2 {
+        font-size: 1.1rem;
+    }
+
+    .semester-info {
+        font-size: 0.8rem;
+    }
+
+    .stats-container {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .stat-card {
+        padding: 12px;
+    }
+
+    .stat-icon {
+        font-size: 1.8rem;
+    }
+
+    .stat-info h3 {
+        font-size: 1.2rem;
+    }
+
+    .stat-info p {
+        font-size: 0.75rem;
+    }
+
+    .section-title {
+        font-size: 1.1rem;
+    }
+
+    .sort-controls label {
+        font-size: 0.8rem;
+    }
+
+    .sort-select {
+        font-size: 0.8rem;
+        padding: 7px 10px;
+    }
+
+    .section-subtitle {
+        font-size: 0.75rem;
+    }
+
+    .attendance-card {
+        padding: 12px;
+    }
+
+    .course-code {
+        font-size: 0.8rem;
+    }
+
+    .course-name {
+        font-size: 0.9rem;
+    }
+
+    .attendance-badge {
+        font-size: 1rem;
+        padding: 5px 10px;
+    }
+
+    .course-stats {
+        gap: 8px;
+    }
+
+    .stat-item {
+        font-size: 0.8rem;
+    }
+
+    .status-box {
+        padding: 8px;
+        font-size: 0.8rem;
+    }
+
+    .predictor-box {
+        padding: 10px;
+    }
+
+    .predictor-title {
+        font-size: 0.8rem;
+        margin-bottom: 10px;
+    }
+
+    .predictor-input-row {
+        gap: 6px;
+        margin-bottom: 8px;
+    }
+
+    .predictor-input-half {
+        padding: 9px;
+        font-size: 0.8rem;
+    }
+
+    .btn-calculate {
+        padding: 10px;
+        font-size: 0.85rem;
+    }
+
+    .calc-result {
+        margin-top: 12px;
+    }
+
+    .result-summary {
         padding: 8px;
     }
 
+    .result-header {
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+    }
+
+    .result-details {
+        font-size: 0.8rem;
+    }
+
+    .stat-warning,
+    .stat-success,
+    .stat-neutral {
+        padding: 8px;
+        font-size: 0.8rem;
+        gap: 8px;
+    }
+
+    .stat-icon {
+        font-size: 1rem;
+    }
+
     .login-box {
-        padding: 25px;
+        padding: 20px;
+    }
+
+    .logo h1 {
+        font-size: 1.5rem;
+    }
+
+    .logo p {
+        font-size: 0.9rem;
     }
 }
 
@@ -721,12 +925,57 @@ body {
     margin-bottom: 20px;
 }
 
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.section-title {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+}
+
+.sort-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sort-controls label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.sort-select {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.sort-select:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.sort-select:hover {
+    border-color: var(--accent-blue);
+}
+
 .section-subtitle {
     color: var(--text-secondary);
     font-size: 0.9rem;
-    margin-top: -15px;
-    margin-bottom: 20px;
-    margin-left: 34px;
-    /* Align with icon in title */
+    margin: 0;
     font-style: italic;
 }

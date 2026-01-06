@@ -84,7 +84,17 @@
 
             <div class="attendance-container">
                 <div class="section-header">
-                    <h3 class="section-title">📋 Course Attendance</h3>
+                    <div class="header-top">
+                        <h3 class="section-title">📋 Course Attendance</h3>
+                        <div class="sort-controls">
+                            <label for="sortOrder">Sort by:</label>
+                            <select id="sortOrder" class="sort-select">
+                                <option value="normal">Default Order</option>
+                                <option value="ascending">Lowest to Highest %</option>
+                                <option value="descending">Highest to Lowest %</option>
+                            </select>
+                        </div>
+                    </div>
                     <p class="section-subtitle">Note: Each session mentioned here is of 45 minutes duration</p>
                 </div>
                 <div id="attendanceTable">
