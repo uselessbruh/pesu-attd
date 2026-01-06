@@ -484,17 +484,40 @@ body {
 }
 
 .predictor-title {
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text-muted);
-    margin-bottom: 10px;
+    font-size: 0.9rem;
     font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 15px;
+}
+
+.predictor-section {
+    margin-bottom: 15px;
+    padding: 12px;
+    background: rgba(59, 130, 246, 0.05);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.predictor-section:last-child {
+    margin-bottom: 0;
+}
+
+.predictor-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    font-weight: 500;
 }
 
 .predictor-input-group {
     display: flex;
     gap: 8px;
+}
+
+.predictor-dual-input {
+    display: flex;
+    gap: 8px;
+    align-items: center;
 }
 
 .predictor-input {
@@ -508,7 +531,20 @@ body {
     transition: all 0.2s;
 }
 
-.predictor-input:focus {
+.predictor-input-small {
+    flex: 1;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    min-width: 80px;
+}
+
+.predictor-input:focus,
+.predictor-input-small:focus {
     outline: none;
     border-color: var(--accent-blue);
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
@@ -522,11 +558,29 @@ body {
     border-radius: var(--radius-sm);
     font-size: 0.9rem;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.2s;
+    white-space: nowrap;
 }
 
 .btn-predict:hover {
     background: #2563eb;
+    transform: translateY(-1px);
+}
+
+.btn-predict-warning {
+    background: var(--accent-red);
+}
+
+.btn-predict-warning:hover {
+    background: #dc2626;
+}
+
+.btn-predict-combined {
+    background: var(--accent-purple);
+}
+
+.btn-predict-combined:hover {
+    background: #7c3aed;
 }
 
 .predictor-result {
@@ -534,6 +588,7 @@ body {
     font-size: 0.9rem;
     color: var(--text-secondary);
     min-height: 20px;
+    line-height: 1.5;
 }
 
 .loading {
