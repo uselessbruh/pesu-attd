@@ -15,6 +15,7 @@ loginForm.addEventListener('submit', async (e) => {
 
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
+    const rememberMe = document.getElementById('rememberMe').checked;
 
     // Show loading state
     loginBtn.disabled = true;
@@ -48,6 +49,17 @@ loginForm.addEventListener('submit', async (e) => {
 
         if (!data.success) {
             throw new Error(data.error || 'Failed to fetch data');
+        }
+
+        // Save credentials if Remember Me is checked
+        if (rememberMe) {
+            localStorage.setItem('savedUsername', username);
+            localStorage.setItem('savedPassword', btoa(password)); // Basic encoding
+            localStorage.setItem('rememberMe', 'true');
+        } else {
+            localStorage.removeItem('savedUsername');
+            localStorage.removeItem('savedPassword');
+            localStorage.removeItem('rememberMe');
         }
 
         // Store data and show dashboard
@@ -314,6 +326,11 @@ logoutBtn.addEventListener('click', async () => {
         console.error('Logout error:', error);
     }
 
+    // Clear stored credentials
+    localStorage.removeItem('savedUsername');
+    localStorage.removeItem('savedPassword');
+    localStorage.removeItem('rememberMe');
+
     // Reset form
     loginForm.reset();
     loginBtn.disabled = false;
@@ -327,18 +344,69 @@ logoutBtn.addEventListener('click', async () => {
 
 // Check if already logged in on page load
 window.addEventListener('load', async () => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/all_data`, {
-            credentials: 'include'
-        });
+    // Check for saved credentials
+    const savedUsername = localStorage.getItem('savedUsername');
+    const savedPassword = localStorage.getItem('savedPassword');
+    const rememberMe = localStorage.getItem('rememberMe');
 
-        const data = await response.json();
+    if (rememberMe === 'true' && savedUsername && savedPassword) {
+        // Auto-fill credentials
+        document.getElementById('username').value = savedUsername;
+        document.getElementById('password').value = atob(savedPassword); // Decode
+        document.getElementById('rememberMe').checked = true;
 
-        if (data.success) {
-            displayDashboard(data);
+        // Auto-login
+        try {
+            loginBtn.disabled = true;
+            loginBtn.querySelector('.btn-text').textContent = 'Logging in...';
+            loginBtn.querySelector('.spinner').style.display = 'block';
+
+            const loginResponse = await fetch(`${API_BASE_URL}/api/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `username=${encodeURIComponent(savedUsername)}&password=${encodeURIComponent(atob(savedPassword))}`,
+                credentials: 'include'
+            });
+
+            const loginData = await loginResponse.json();
+
+            if (loginData.success) {
+                const dataResponse = await fetch(`${API_BASE_URL}/api/all_data`, {
+                    credentials: 'include'
+                });
+
+                const data = await dataResponse.json();
+
+                if (data.success) {
+                    displayDashboard(data);
+                    return;
+                }
+            }
+        } catch (error) {
+            console.log('Auto-login failed:', error);
         }
-    } catch (error) {
-        // User not logged in, stay on login page
-        console.log('Not logged in');
+
+        // Reset button state if auto-login failed
+        loginBtn.disabled = false;
+        loginBtn.querySelector('.btn-text').textContent = 'Login';
+        loginBtn.querySelector('.spinner').style.display = 'none';
+    } else {
+        // Check for active session
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/all_data`, {
+                credentials: 'include'
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                displayDashboard(data);
+            }
+        } catch (error) {
+            // User not logged in, stay on login page
+            console.log('Not logged in');
+        }
     }
 });
